@@ -4,8 +4,8 @@ import { check, signToken } from "../middleware/authcheck.js";
 import { authUser } from "../controller/user.js";
 // import { cookie } from "express/lib/response";
 import cookieParser from "cookie-parser";
-
-// const temp= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiI2MWQ4N2Y0ODE5MDZiNjM5MjEyZTVmZWQiLCJpYXQiOjE2NDE1OTM2NDksImV4cCI6MTY0MTcwODg0OX0.2vXdAEbNPiCJr8gsuFq3uS4xCU7v8pcewZwAsoXtDC8"
+let temp=""
+ temp= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiI2MWQ4N2Y0ODE5MDZiNjM5MjEyZTVmZWQiLCJpYXQiOjE2NDE1OTM2NDksImV4cCI6MTY0MTcwODg0OX0.2vXdAEbNPiCJr8gsuFq3uS4xCU7v8pcewZwAsoXtDC8"
 
 const app = express();
 app.use(cors());
