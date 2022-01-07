@@ -8,7 +8,6 @@ const database = async (dbUrl)=>{
     await mongoose.connect(dbUrl,{ useNewUrlParser: true } )
   } catch (error) {
     console.log(error);
-    
   }
 
 }

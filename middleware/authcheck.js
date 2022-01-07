@@ -1,44 +1,45 @@
-import jwt from "jsonwebtoken"
-const jwtKey = "";
-const maxAge= 60*60*32;  //this is in seconds
+import jwt from "jsonwebtoken";
+import { userid } from "../controller/user.js";
+import { config } from "dotenv";
 
-function sign(id){
-    const token = jwt.sign({ id }, process.env.SIGN,{
-        expiresIn: maxAge
-    });
-    console.log(token);
+const maxAge = 60 * 60 * 32; //this is in seconds
 
-    return token;
-    
+function signToken(req, res, next) {
+  const token = jwt.sign({ userid }, process.env.SIGN, {
+    expiresIn: maxAge,
+  });
+  console.log(token);
+  res.cookie("token", token);
+  next();
+  //   return token;
 }
 
-function check(req,res,next){
+function check(req, res, next) {
+  try {
+    const cToken = req.cookies.token;
 
-    try{
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMyIsImlhdCI6MTY0MTU2NDU5NiwiZXhwIjoxNjQxNjc5Nzk2fQ.H7ClsDxiEl-Tvf_Y4jj6gXy6D3RXHXDLpWDHOl_SLCc"
-    const decode = jwt.verify( token,process.env.SIGN,(err,dToken)=>{
-        if(err){ console.log("first error");
+    const jwtKey = process.env.SIGN; // jwtKey is showing undefined why ????
+    //  console.log(token, jwtKey);
+
+    const decode = jwt.verify(cToken, process.env.SIGN, (err, dToken) => {
+      if (err) {
+        console.log("first error");
+        res.redirect("/");
 
         //redirect to auth page
-
-        }
-        else{
-            console.log(dToken, "done"); 
-            // login to frp home page 
-            next();
-        }
-        
-    })
+      } else {
+        console.log(dToken, "done");
+        // login to frp home page
+        next();
+      }
+    });
     console.log(decode);
-    
-
-    }
-    catch(err){
-        console.log( "auth failed");
-        //redirect to auth page 
-        
-    }
-
+  } catch (err) {
+    const cToken = req.cookies.token;
+    console.log("auth failed", err);
+    res.redirect("/");
+    //redirect to auth page
+  }
 }
 
-export {check, sign}
+export { check, signToken };
