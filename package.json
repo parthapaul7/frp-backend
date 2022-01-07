@@ -1,0 +1,20 @@
+{
+  "name": "frp-backend",
+  "version": "1.0.0",
+  "description": "frp backend hacathon",
+  "main": "index.js",
+  "author": "partha paul",
+  "license": "MIT",
+  "engines": {
+    "node": "14.16.1"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.1.5",
+    "nodemon": "^2.0.15"
+  },
+  "type": "module"
+}
