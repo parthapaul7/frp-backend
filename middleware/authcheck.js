@@ -1,16 +1,28 @@
 import jwt from "jsonwebtoken";
-import { userid } from "../controller/user.js";
-import { config } from "dotenv";
+import { authUser } from "../controller/user.js";
 
 const maxAge = 60 * 60 * 32; //this is in seconds
 
-function signToken(req, res, next) {
-  const token = jwt.sign({ userid }, process.env.SIGN, {
+async function signToken(req, res, next) {
+  const id= req.params.id
+
+  const auth = await authUser(id)
+  
+  if( auth.length == 0){
+    res.send({error: "wrong enrollment"})
+  }
+  else{
+  const token = jwt.sign({ id }, process.env.SIGN, {
     expiresIn: maxAge,
   });
-  console.log(token);
-  res.cookie("token", token);
+  // console.log(token);
+      res.cookie("token", token, { maxAge: 1000 * 60 * 60 * 24 });
+      res.cookie("cookie is embeeded" );
+      res.send(auth)    
+
+    }
   next();
+
   //   return token;
 }
 
@@ -24,7 +36,7 @@ function check(req, res, next) {
     const decode = jwt.verify(cToken, process.env.SIGN, (err, dToken) => {
       if (err) {
         console.log("first error");
-        res.redirect("/");
+        res.redirect("/auth");
 
         //redirect to auth page
       } else {
@@ -37,7 +49,7 @@ function check(req, res, next) {
   } catch (err) {
     const cToken = req.cookies.token;
     console.log("auth failed", err);
-    res.redirect("/");
+    res.redirect("/auth");
     //redirect to auth page
   }
 }
