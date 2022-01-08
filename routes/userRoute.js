@@ -1,31 +1,54 @@
-import {app} from "../app.js"
-import { signToken } from "../middleware/authcheck.js";
-import {insertUser} from "../database/upload.js"
-import { authUser } from "../controller/user.js";
+import { app } from "../app.js";
+import { check} from "../middleware/authcheck.js";
+import {getBkmrkandApplied,updateBookmarks, updateApplied} from "../controller/user.js"
 
+//jwt is used to protect routes
 
-async function authRoute(){
-    app
-    .route("/auth")
-    .get((req, res, next) => {
-      res.send(
-        "ok this is a get request in the auth page, use post request to do auth "+
-        " Auth page "
-      );
+async function allUserData(){
+    //////////////////////      BOOKMARKS    //////////////////////////////
+    app.route("/bookmark").get(check,async (req,res)=>{
+        try {
+           const val= await getBkmrkandApplied(req.cookies.enrollment)
+           res.send(val.bookmarked)
+        } catch (error) {
+            console.log(error);
+            
+        }
+
+    }).post(check ,async (req,res)=>{       // update method can also be used 
+            try {
+             const val = await updateBookmarks(req.cookies.enrollment, res.body.bookmarks)
+                res.send(val)
+            } catch (error) {
+                console.log(error);
+                
+            }
     })
-    .post(signToken, async (req, res) => {    //jwt is used to protect routes
-      await insertUser()
-      const val = await authUser(req.body.id); // only id parameter used in final will happen through chanelli
-      res.send(val);
-    });
 
-  app.route("/authtoken/:id").get(signToken,async (req, res) => {
-    console.log("authtoken route");
+    /////////////////////       APPLIED     //////////////////////////////
 
-    // const val = await authUser(req.params.id); // only id parameter used in final will happen through chanelli
-  });
+    app.route("/applied").get(check, async (req,res)=>{
+        try {
+           const val= await getBkmrkandApplied(req.cookies.enrollment)
+           res.send(val.applied)
+        } catch (error) {
+            console.log(error);
+            
+        }
+
+    }).post(check,async (req,res)=>{
+            try {
+             const val = await updateApplied(req.cookies.enrollment, res.body.applied)
+                res.send(val)
+            } catch (error) {
+                console.log(error);
+                
+            }
+    })
+    
+
+    /// notification of user and result will come from database itself
 }
 
-export {authRoute}
 
-
+export {allUserData}

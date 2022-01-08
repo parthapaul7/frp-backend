@@ -1,10 +1,11 @@
 import { database } from "./database/connect.js";
 import { config } from "dotenv";
-import { authRoute } from "./routes/userRoute.js";
+import { authRoute, loggingOut } from "./routes/authRoute.js";
 import projectRoute from "./routes/projectRoute.js";
 import express from "express";
 import cors from "cors"
 import cookieParser from "cookie-parser";
+import { allUserData } from "./routes/userRoute.js";
 
 export const app = express();
 app.use(cors());
@@ -21,6 +22,8 @@ database(dbUrl)
 /////////////////////       ROUTING         ///////////////////////
 authRoute();
 projectRoute();
+allUserData()
+loggingOut()
 /////////////////////       ROUTING         ///////////////////////
 
 

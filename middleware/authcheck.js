@@ -1,27 +1,18 @@
 import jwt from "jsonwebtoken";
 import { authUser } from "../controller/user.js";
 
-const maxAge = 60 * 60 * 32; //this is in seconds
+const maxAge = 60 * 60 * 32; 
 
-async function signToken(req, res, next) {
-  const id= req.params.id
-
-  const auth = await authUser(id)
-  
-  if( auth.length == 0){
-    res.send({error: "wrong enrollment"})
-  }
-  else{
+async function signToken(req, res, next,auth) {
+  const id = req.params.id;
   const token = jwt.sign({ id }, process.env.SIGN, {
-    expiresIn: maxAge,
+    expiresIn: maxAge,   //this is in seconds
   });
-  // console.log(token);
-      res.cookie("token", token, { maxAge: 1000 * 60 * 60 * 24 });
-      res.cookie("cookie is embeeded" );
-      res.send(auth)    
 
-    }
-  next();
+  res.cookie("token", token, { maxAge : maxAge*1000});
+  res.cookie("enrollment", id, {maxAge: maxAge*1000})
+  // res.send(auth)
+  return 
 
   //   return token;
 }
@@ -36,7 +27,7 @@ function check(req, res, next) {
     const decode = jwt.verify(cToken, process.env.SIGN, (err, dToken) => {
       if (err) {
         console.log("first error");
-        res.redirect("/auth");
+        res.send({error:"your are not logged in"})
 
         //redirect to auth page
       } else {
@@ -49,7 +40,7 @@ function check(req, res, next) {
   } catch (err) {
     const cToken = req.cookies.token;
     console.log("auth failed", err);
-    res.redirect("/auth");
+     res.send({error:"your are not logged in"})
     //redirect to auth page
   }
 }
