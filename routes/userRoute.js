@@ -17,7 +17,7 @@ async function allUserData(){
 
     }).post(check ,async (req,res)=>{       // update method can also be used 
             try {
-             const val = await updateBookmarks(req.cookies.enrollment, res.body.bookmarks)
+             const val = await updateBookmarks(req.cookies.enrollment, req.body.bookmarked)
                 res.send(val)
             } catch (error) {
                 console.log(error);
@@ -38,7 +38,7 @@ async function allUserData(){
 
     }).post(check,async (req,res)=>{
             try {
-             const val = await updateApplied(req.cookies.enrollment, res.body.applied)
+             const val = await updateApplied(req.cookies.enrollment, req.body.applied)
                 res.send(val)
             } catch (error) {
                 console.log(error);

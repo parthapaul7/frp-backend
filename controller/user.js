@@ -21,13 +21,19 @@ async function authUser(id) {
 async function getBkmrkandApplied(id) {
   const val = await User.find({ "personalData.acadDetails.enrollmentNr": id });
 
-  const bookmarked = val.map((e) => e.applications.bookmarked);
-  const applied = val.map(e=>e.applications.applied)
+    let bookmarked=[];
+    let applied=[];
+
+    val.map((e) =>{ bookmarked = e.applications.bookmarked});
+
+    val.map(e=>{applied = e.applications.applied})
 
   return {bookmarked,applied};
 }
 
 async function updateBookmarks(id, bkmark) {
+    // console.log(bkmark);
+    
   const val = await User.updateOne(
     { "personalData.acadDetails.enrollmentNr": id },
     { "applications.bookmarked": bkmark }
@@ -36,7 +42,7 @@ async function updateBookmarks(id, bkmark) {
   return val
 }
 
-async function updateApplied(id,appied){
+async function updateApplied(id,applied){
     const val = await User.updateOne(
         { "personalData.acadDetails.enrollmentNr": id },
         { "applications.applied": applied }
