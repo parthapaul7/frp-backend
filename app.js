@@ -6,6 +6,7 @@ import express from "express";
 import cors from "cors"
 import cookieParser from "cookie-parser";
 import { allUserData } from "./routes/userRoute.js";
+import path from "path";
 
 export const app = express();
 app.use(cors());
@@ -20,6 +21,18 @@ const dbUrl = process.env.DB_URL
 
 database(dbUrl)
 /////////////////////       ROUTING         ///////////////////////
+app.route("/").get((req,res)=>{
+    res.send(    "<h2>instructions</h2>" +
+    "to /auth for auth page -- login with channeli and create user in mongo database <br>" +
+    "to /authtoken/{enrollment} to get the authtoken ----- the enrollment should be from database<br>"+
+    "post request is available with parameter id to /auth  --- to get the jwt token"+
+    "to /project  for projects --- protected route<br>" +
+    "to /bookmark for get and post bookmarks --- protected route<br>" +
+    "to /applied for nos. of applied array ---- protected route<br> " +
+    "to /logut  for loggin out and removing token from cookie ---- protected route")
+    
+})
+
 authRoute();
 projectRoute();
 allUserData()

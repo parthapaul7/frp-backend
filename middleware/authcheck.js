@@ -1,10 +1,12 @@
 import jwt from "jsonwebtoken";
 import { authUser } from "../controller/user.js";
 
-const maxAge = 60 * 60 * 32; 
+const maxAge = 60 * 60 * 12; 
 
-async function signToken(req, res, next,auth) {
-  const id = req.params.id;
+async function signToken(req, res, next) {
+  let  id = req.params.enrollment;
+  if(id == undefined) id = req.body.enrollment;
+
   const token = jwt.sign({ id }, process.env.SIGN, {
     expiresIn: maxAge,   //this is in seconds
   });
@@ -12,9 +14,8 @@ async function signToken(req, res, next,auth) {
   res.cookie("token", token, { maxAge : maxAge*1000});
   res.cookie("enrollment", id, {maxAge: maxAge*1000})
   // res.send(auth)
+  // next();
   return 
-
-  //   return token;
 }
 
 function check(req, res, next) {
@@ -22,14 +23,12 @@ function check(req, res, next) {
     const cToken = req.cookies.token;
 
     const jwtKey = process.env.SIGN; // jwtKey is showing undefined why ????
-    //  console.log(token, jwtKey);
 
     const decode = jwt.verify(cToken, process.env.SIGN, (err, dToken) => {
       if (err) {
         console.log("first error");
-        res.send({error:"your are not logged in"})
+        res.status(404).json({error:"your are not logged in", msg:"go to /authtoken/<_enrollment> to login or post request,  enrollment should be from database and valid "})
 
-        //redirect to auth page
       } else {
         console.log(dToken, "done");
         // login to frp home page
@@ -41,7 +40,7 @@ function check(req, res, next) {
     const cToken = req.cookies.token;
     console.log("auth failed", err);
      res.send({error:"your are not logged in"})
-    //redirect to auth page
+
   }
 }
 

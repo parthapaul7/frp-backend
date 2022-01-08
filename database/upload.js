@@ -4,7 +4,7 @@ import { Projects, ProjectDetails, TestimonialDetails, userData } from "./data.j
 async function insertUser(){
 
 
-////////////////////////////////  DATA COMING FROM CHANEELII /////////////////////////////
+////////////////////////////////  DATA COMING FROM CHANNELI  /////////////////////////////
 let oneUser = {
     applications: { applied: ["1", "3", "5"], bookmarked: ["2", "4"] },
     personalData: {
