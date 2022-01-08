@@ -1,5 +1,5 @@
 import { project, projectDetail, testimonialDetail , User} from "../models/models.js";
-import { Projects, ProjectDetails, TestimonialDetails, userData } from "./data.js";
+
 
 async function insertUser(){
 

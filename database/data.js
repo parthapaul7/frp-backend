@@ -1,3 +1,6 @@
+// this is just dead demo data 
+/// already uploaded to the database
+
 const Projects = [
   {
     createdAt: "19/02/21",
@@ -1240,4 +1243,4 @@ const userData = {
     },
   ],
 };
-export { Projects, ProjectDetails, TestimonialDetails ,userData};
+
